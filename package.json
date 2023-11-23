@@ -1,6 +1,6 @@
 {
   "name": "fiction-expo-clerk-auth",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Social Media logins made easy with help of clerk in expo by Fiction Developers",
   "main": "src/ExpoFictionClerkAuth.js",
   "scripts": {
