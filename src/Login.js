@@ -1,20 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { Button, Platform } from "react-native";
 import { useOAuth, useUser } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "./hooks/warmupBrowser";
 
 WebBrowser.maybeCompleteAuthSession();
+const useForceUpdate = () => {
+    const [, updateState] = React.useState();
+    return useCallback(() => updateState({}), []);
+}
 
 const SignInWithOAuth = (props) => {
     // Warm up the android browser to improve UX
     // https://docs.expo.dev/guides/authentication/#improving-user-experience
     useWarmUpBrowser();
+    const forceUpdate = useForceUpdate();
 
     const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
     const onPress = React.useCallback(async () => {
-        console.log("clicked google")
+        console.log("clicked google yes")
         try {
             const { createdSessionId, setActive } =
                 await startOAuthFlow();
@@ -33,6 +38,7 @@ const SignInWithOAuth = (props) => {
     const { startOAuthFlow:facebooklogin } = useOAuth({ strategy: "oauth_facebook" });
 
     const onPressFacebook = React.useCallback(async () => {
+        console.log("clicked facebook yes")
         try {
             const { createdSessionId, signIn, signUp, setActive } =
                 await facebooklogin();
@@ -80,6 +86,10 @@ const SignInWithOAuth = (props) => {
                 console.log("apple login not supported on android")
             }
         }
+
+        setTimeout(()=>{
+            forceUpdate()
+        },300)
     },[props.click])
 
     return (

@@ -3,15 +3,21 @@ import {  StyleSheet,  View } from 'react-native';
 import SignInWithOAuth from './Login';
 import Logout from './Logout';
 import UserDetails from './UserDetails';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-
+const useForceUpdate = () => {
+    const [, updateState] = React.useState();
+    return useCallback(() => updateState({}), []);
+}
 export default function ExpoFictionClerkAuth(props) {
     const [clicked, setClicked] = useState("start")
-
+    const forceUpdate = useForceUpdate();
 
     useEffect(()=>{
         setClicked(props.click)
+        setTimeout(()=>{
+            forceUpdate()
+        },300)
     },[props.click])
 
     
@@ -30,7 +36,8 @@ export default function ExpoFictionClerkAuth(props) {
 
 
                     
-                    <SignInWithOAuth click={clicked}/>
+                    {clicked!='clear' &&<SignInWithOAuth click={clicked}/>}
+                    {clicked=='clear' &&<></>}
 
             </ClerkProvider>
         </View>
